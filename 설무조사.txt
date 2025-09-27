@@ -1,0 +1,6 @@
+1. 훈련과정 개발 요구조사 링크 
+https://docs.google.com/forms/d/1uKtrnlWIadEJCC4C8h4MAg0RSeba7fwsZiRmEOvEEMM/viewform?edit_requested=true
+
+
+2. 텐서플로우 만족도 조사 링크
+https://docs.google.com/forms/d/1VT9jZNpdgc8QeJ3Uynt8Ya5-3e9DQzu0MPS-ebtJLh8/viewform?edit_requested=true
