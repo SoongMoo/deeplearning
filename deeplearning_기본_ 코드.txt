@@ -19,6 +19,7 @@ model.add(Dense(12, activation='relu'))
 model.add(Dense(8, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 model.summary() # 안해도 됨
+#모델 적용
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # 과적합 오류를 방지, 최적의 모델 저장
