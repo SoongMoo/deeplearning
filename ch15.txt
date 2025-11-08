@@ -21,7 +21,7 @@ model.add(Dense(8, activation='relu'))
 model.add(Dense(1))
 model.summary() # 안해도 됨
 #모델 적용
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='mse', optimizer='adam', metrics=['mae'])
 
 
 # 과적합 오류를 방지, 최적의 모델 저장
@@ -39,8 +39,6 @@ history=model.fit(X_train, y_train, epochs=2000, batch_size=500
 # 모델을 테스트셋에 적용해 정확도를 구합니다. 
 score=model.evaluate(X_test, y_test)
 print('Test accuracy:', score[1])
-
-
 
 
 #model.save("./data/wine.keras")
