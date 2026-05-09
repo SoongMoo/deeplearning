@@ -7,10 +7,9 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.datasets import mnist
 
 # 데이터 가공 
-df = pd.read_csv("./data/house_train.csv")
-cols_train=['OverallQual','GrLivArea','GarageCars','GarageArea','TotalBsmtSF']
-X = df[cols_train]
-y = df['SalePrice'].values
+df = pd.read_csv('./data/wine.csv', header=None)
+X = df.iloc[:,0:12]
+y = df.iloc[:,12]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 # 모델 구조
@@ -27,7 +26,7 @@ model.compile(loss='mse', optimizer='adam', metrics=['mae'])
 # 과적합 오류를 방지, 최적의 모델 저장
 early_stopping_callback = EarlyStopping(monitor='val_loss', patience=20)
 
-modelpath = "./data/house.keras"
+modelpath = "./data/wine_retrain.keras"
 checkpointer = ModelCheckpoint(filepath=modelpath,monitor='val_loss',verbose=0, save_best_only=True)
 
 
@@ -41,4 +40,43 @@ score=model.evaluate(X_test, y_test)
 print('Test accuracy:', score[1])
 
 
-#model.save("./data/wine.keras")
+#model.save("./data/wine_retrain.keras")
+
+
+# 재학습
+from tensorflow.keras.models import load_model
+model = load_model('./wine_retrain.keras')  
+df = pd.read_csv('./data/wine.csv', header=None)
+X = df.iloc[:,0:12]
+y = df.iloc[:,12]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+early_stopping_callback = EarlyStopping(monitor='val_loss', patience=20)
+modelpath = "./data/wine_retrain.keras"
+checkpointer = ModelCheckpoint(filepath=modelpath,monitor='val_loss',verbose=0, save_best_only=True)
+# 학습
+history=model.fit(X_train, y_train, epochs=2000, batch_size=500
+		, validation_split=0.25, verbose=1 
+		,callbacks=[early_stopping_callback, checkpointer] )
+
+
+# 예측
+import numpy as np
+from tensorflow.keras.models import load_model
+
+# 모델 불러오기
+model = load_model('./wine_retrain.keras')  
+
+# 새 데이터 (12개의 입력 속성)
+new_data = np.array([[7.4, 0.7, 0, 1.9, 0.076, 11, 34, 0.9978, 3.51, 0.56, 9.4, 5]])
+
+# 예측 수행
+pred = model.predict(new_data)
+
+# sigmoid 출력이므로 0.5 기준으로 분류
+if pred[0] > 0.5:
+    print("→ 화이트 와인입니다")
+else:
+    print("→ 레드 와인입니다")
+
+print(f"(예측 확률: {pred[0][0]:.4f})")
