@@ -1,0 +1,27 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from tensorflow.keras.preprocessing import image
+
+
+img = cv2.imread("my_digit.png", cv2.IMREAD_GRAYSCALE)
+img = cv2.resize(img, (28, 28))  # MNIST와 동일한 크기로 리사이즈
+
+# 만약 준비하신 이미지가 흰색 배경에 검은색 글씨인 경우
+# img = cv2.bitwise_not(img)
+
+plt.imshow(img, cmap="gray")
+plt.show()
+
+img = img.astype("float32") / 255.0
+
+img = img.reshape(1, 28, 28, 1)
+
+# 4. 예측 수행
+prediction = model.predict(img)
+predicted_label = np.argmax(prediction)
+
+print("-" * 50)
+print("예측된 숫자:", predicted_label)
+print("클래스별 확률:\n", prediction)
+print("-" * 50)
